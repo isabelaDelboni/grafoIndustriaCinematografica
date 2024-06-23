@@ -146,11 +146,11 @@ int main(void) {
             movie *filme = buscarFilme(movie_node->movieId);
             if (filme != NULL) {
                 if (!algumAtorComFilme) {
-                    // printf("---Atores e seus filmes---\n\n");
+                     printf("---Atores e seus filmes---\n\n");
                     algumAtorComFilme = 1; 
                 }
-                // printf("id: %d, Nome: %s %s\n", atores[i]->id, atores[i]->name, atores[i]->surname);
-                // printf(" id: %d, Titulo: %s\n\n", filme->id, filme->title);
+                 printf("id: %d, Nome: %s %s\n", atores[i]->id, atores[i]->name, atores[i]->surname);
+                 printf(" id: %d, Titulo: %s\n\n", filme->id, filme->title);
                 filmesEncontrados = 1;
             }
             movie_node = movie_node->next;
