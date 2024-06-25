@@ -4,8 +4,8 @@
 #include "structAtor.h"
 #include "structMovie.h"
 
-#define MAX_ATORES 99999
-#define MAX_FILMES 99999
+#define MAX_ATORES 9000
+#define MAX_FILMES 9000
 
 ator *atores[MAX_ATORES];
 movie *filmes[MAX_FILMES];
@@ -40,7 +40,7 @@ void lerAtor(const char *filename) {
         }
 
         atores[atorCount++] = newAtor;
-        printf("id: %i Nome: %s\n", j + 1, atores[j]->name);
+        printf("id: %i Nome: %s %s\n", j + 1, atores[j]->name, atores[j]->surname);
         j++;
     }
 
@@ -135,23 +135,21 @@ int main(void) {
     lerFilme("title.basics.tsv");
     printf("\n");
 
-    int i, k;
     int algumAtorComFilme = 0;
 
-    for (i = 0; i < atorCount; i++) {
-        int filmesEncontrados = 0;
+    for (int i = 0; i < atorCount; i++) {
         node *movie_node = atores[i]->movies;
 
         while (movie_node) {
             movie *filme = buscarFilme(movie_node->movieId);
             if (filme != NULL) {
                 if (!algumAtorComFilme) {
-                     printf("---Atores e seus filmes---\n\n");
+                    printf("---Atores e seus filmes---\n\n");
                     algumAtorComFilme = 1; 
                 }
-                 printf("id: %d, Nome: %s %s\n", atores[i]->id, atores[i]->name, atores[i]->surname);
-                 printf(" id: %d, Titulo: %s\n\n", filme->id, filme->title);
-                filmesEncontrados = 1;
+                printf("id: %d, Nome: %s %s\n", atores[i]->id, atores[i]->name, atores[i]->surname);
+                printf(" id: %d, Titulo: %s\n\n", filme->id, filme->title);
+                break; 
             }
             movie_node = movie_node->next;
         }
@@ -162,7 +160,20 @@ int main(void) {
     }
 
 
+    if (!algumAtorComFilme) {
+        printf("Nenhum ator possui filmes associados.\n");
+    }
+	
+
     gerarDOT("input.dot");
+    
+    for (int i = 0; i < atorCount; i++) {
+        liberarAtor(atores[i]);
+    }
+
+    for (int i = 0; i < filmeCount; i++) {
+        freeFilme(filmes[i]);
+    }
 
     return 0;
 }

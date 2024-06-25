@@ -33,7 +33,7 @@ movie *criarFilme(int id, const char *title) {
 void addVizinhoFilme(movie *movie, int neighborId) {
     adjNode *newNode = (adjNode *)malloc(sizeof(adjNode));
     if (!newNode) {
-        perror("Error allocating memory for new neighbor node");
+        perror("Erro ao alocar memoria");
         exit(EXIT_FAILURE);
     }
     newNode->movieId = neighborId;
