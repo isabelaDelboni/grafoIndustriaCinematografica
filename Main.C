@@ -4,8 +4,8 @@
 #include "structAtor.h"
 #include "structMovie.h"
 
-#define MAX_ATORES 9000
-#define MAX_FILMES 9000
+#define MAX_ATORES 14000000
+#define MAX_FILMES 14000000
 
 ator *atores[MAX_ATORES];
 movie *filmes[MAX_FILMES];
@@ -32,7 +32,7 @@ void lerAtor(const char *filename) {
                &i[0], &i[1], &i[2], &i[3]);
 
         ator *newAtor = criarAtor(id, name, surname, birth, death);
-		
+        
         for(k = 0; k < 4; k++) {
             if (i[k] != 0) {
                 adicionarFilmeAoAtor(newAtor, i[k]);
@@ -40,7 +40,6 @@ void lerAtor(const char *filename) {
         }
 
         atores[atorCount++] = newAtor;
-        printf("id: %i Nome: %s %s\n", j + 1, atores[j]->name, atores[j]->surname);
         j++;
     }
 
@@ -66,7 +65,6 @@ void lerFilme(const char *filename) {
         if (strstr(tipo, "movie") != NULL) {
             movie *newMovie = criarFilme(id, tituloOriginal);
             filmes[filmeCount++] = newMovie;
-            printf("id: %d, Titulo Filme: %s\n", newMovie->id, newMovie->title);
         }
     }
 
@@ -117,8 +115,20 @@ void gerarDOT(const char *filename) {
 
         for (int j = 0; j < numFilmes; j++) {
             for (int k = j + 1; k < numFilmes; k++) {
-                fprintf(file, "\t\"%s\" -- \"%s\";\n", filmesAtor[j]->title, filmesAtor[k]->title);
+                addVizinhoFilme(filmesAtor[j], filmesAtor[k]->id);
+                addVizinhoFilme(filmesAtor[k], filmesAtor[j]->id);
             }
+        }
+    }
+
+    for (int i = 0; i < filmeCount; i++) {
+        adjNode *current = filmes[i]->neighbors;
+        while (current) {
+            movie *vizinho = buscarFilme(current->movieId);
+            if (vizinho) {
+                fprintf(file, "\t\"%s\" -- \"%s\";\n", filmes[i]->title, vizinho->title);
+            }
+            current = current->next;
         }
     }
 
@@ -147,8 +157,6 @@ int main(void) {
                     printf("---Atores e seus filmes---\n\n");
                     algumAtorComFilme = 1; 
                 }
-                printf("id: %d, Nome: %s %s\n", atores[i]->id, atores[i]->name, atores[i]->surname);
-                printf(" id: %d, Titulo: %s\n\n", filme->id, filme->title);
                 break; 
             }
             movie_node = movie_node->next;
@@ -158,13 +166,7 @@ int main(void) {
     if (!algumAtorComFilme) {
         printf("Nenhum ator possui filmes associados.\n");
     }
-
-
-    if (!algumAtorComFilme) {
-        printf("Nenhum ator possui filmes associados.\n");
-    }
-	
-
+    
     gerarDOT("input.dot");
     
     for (int i = 0; i < atorCount; i++) {

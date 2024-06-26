@@ -1,0 +1,1 @@
+Não consegui fazer com 100k artistas e filmes, meu pc ficou algumas horas processando e nunca terminava. Quando tentei com tudo meu pc crashou por falta de RAM (ele tem 32 GB de RAM:D). O código alterado roda no meu pc em uns 50 segundos com tudo.
